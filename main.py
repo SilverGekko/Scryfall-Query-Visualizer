@@ -9,7 +9,8 @@ import sys
 if __name__ == "__main__":
   unique = "game:paper legal:commander -set:sld is:firstprinting"
   selectors = {
-    "legends" : "is:commander"
+    "legends" : "is:commander",
+    "expensive" : "usd>=10"
   }
   api_url = "https://api.scryfall.com/cards/search?&q=year:{0} {1} {2}"
   data = {}
