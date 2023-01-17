@@ -7,20 +7,26 @@ import time
 import sys
 
 if __name__ == "__main__":
-  unique = "game:paper legal:commander -set:sld is:firstprinting"
+  unique = "game:paper legal:commander -set:sld"
   selectors = {
     "legends" : "is:commander",
-    "expensive" : "usd>=10"
+    "expensive" : "usd>=10",
+    "commander" : "settype:commander",
+    "standard" : "settype:standard"
   }
-  api_url = "https://api.scryfall.com/cards/search?&q=year:{0} {1} {2}"
+  api_url = "https://api.scryfall.com/cards/search?&q=year:{0} {1} {2} {3}"
   data = {}
   extra = ""
+  unique_or_reprint = "is:firstprinting"
   if len(sys.argv) > 1:
     extra = selectors[sys.argv[1]]
+  if len (sys.argv) > 2:
+    unique_or_reprint = "is:reprint"
   print("Collecting Data")
   for year in range(1993, datetime.date.today().year):
-    print(api_url.format(year, unique, extra))
-    response = requests.get(api_url.format(year, unique, extra))
+    formatted_query = api_url.format(year, unique, unique_or_reprint, extra)
+    print(formatted_query)
+    response = requests.get(formatted_query)
     json_res = response.json()
     if "total_cards" in json_res:
       data[year] = json_res["total_cards"]
